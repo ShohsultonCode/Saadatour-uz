@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 
 const verif_Token = (req, res, next) => {
-  const token = req.cookies.token || "";
-  
+  const token = req.headers["authorization"].split(' ')[1];
+
   if (!token) {
     return res.status(401).send({ message: "No token provided" });
   }
@@ -11,11 +11,8 @@ const verif_Token = (req, res, next) => {
     if (err) {
       return res.status(401).send({ message: "Invalid token" });
     }
-    
-    
-    req.userId = decoded.id;
-    req.userRole = decoded.role
-  
+
+    req.user = decoded;
     next();
   });
 };
